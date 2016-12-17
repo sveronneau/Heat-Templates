@@ -13,7 +13,7 @@ resources:
             - network: admin_internal_net
           security_groups:
             - default
-          key_name: Stacy
+          key_name: YOUR KEY HERE
           admin_user: cirros
           user_data_format: RAW
           user_data: |
