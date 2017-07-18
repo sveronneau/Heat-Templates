@@ -39,7 +39,7 @@ resources:
       scaling_adjustment: '-1'
 
   cpu_alarm_high:
-    type: OS::Ceilometer::Alarm
+    type: OS::Aodh::Alarm
     properties:
       meter_name: cpu_util
       statistic: avg
@@ -52,7 +52,7 @@ resources:
       comparison_operator: gt
 
   cpu_alarm_low:
-    type: OS::Ceilometer::Alarm
+    type: OS::Aodh::Alarm
     properties:
       meter_name: cpu_util
       statistic: avg
