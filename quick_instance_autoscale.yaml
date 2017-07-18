@@ -10,7 +10,7 @@ resources:
           flavor: tempest2
           image: cirros
           networks:
-            - network: orivate
+            - network: private
           security_groups:
             - default
           key_name: my_bd_stack
