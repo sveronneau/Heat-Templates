@@ -7,14 +7,14 @@ resources:
         type: OS::Nova::Server
         properties:
           metadata: {"metering.stack": {get_param: "OS::stack_id"}}
-          flavor: tempest2
-          image: cirros
+          flavor: <YOUR_FLAVORT_NAME_OR_ID>
+          image: <YOUR_IMAGE_NAME_OR_ID>
           networks:
-            - network: private
+            - network: <YOUR_PRIVATE_NETWORK_NAME_OR_ID>
           security_groups:
-            - default
-          key_name: my_bd_stack
-          admin_user: cirros
+            - <YOUR_SECURITYGROUP_NAME_OR_ID>
+          key_name: <YOUR_KEY_NAME_OR_ID>
+          admin_user: <YOUR_IMAGE_USERNAME>
           user_data_format: RAW
           user_data: |
             #!/bin/sh
@@ -63,4 +63,3 @@ resources:
         - {get_attr: [scaledown_policy, alarm_url]}
       matching_metadata: {'metadata.user_metadata.stack': {get_param: "OS::stack_id"}}
       comparison_operator: lt
-      
