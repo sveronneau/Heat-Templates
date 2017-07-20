@@ -1,4 +1,4 @@
-heat_template_version: 2014-10-16
+heat_template_version: 2016-04-08
 resources:
   scaleup_group:
     type: OS::Heat::AutoScalingGroup
@@ -16,9 +16,6 @@ resources:
           key_name: <YOUR_KEY_NAME_OR_ID>
           admin_user: <YOUR_IMAGE_USERNAME>
           user_data_format: RAW
-          user_data: |
-            #!/bin/sh
-            while [ 1 ] ; do echo $((13**99)) 1>/dev/null 2>&1; done
       min_size: 1
       max_size: 3
 
@@ -48,7 +45,6 @@ resources:
       threshold: 50
       alarm_actions:
         - {get_attr: [scaleup_policy, alarm_url]}
-      matching_metadata: {'metadata.user_metadata.stack': {get_param: "OS::stack_id"}}
       comparison_operator: gt
 
   cpu_alarm_low:
@@ -61,5 +57,26 @@ resources:
       threshold: 10
       alarm_actions:
         - {get_attr: [scaledown_policy, alarm_url]}
-      matching_metadata: {'metadata.user_metadata.stack': {get_param: "OS::stack_id"}}
       comparison_operator: lt
+
+  ceilometer_query:
+    value:
+      str_replace:
+        template:
+          ceilometer statistics -m cpu_util
+          -q metadata.user_metadata.stack=stackval -p 600 -a avg
+        params:
+          stackval: { get_param: "OS::stack_id" }
+    description:
+      This is a Ceilometer query for statistics on the cpu_util meter
+      Samples about OS::Nova::Server instances in this stack. The -q
+      parameter selects Samples according to the subject's metadata.
+      When a VM's metadata includes an item of the form metering.X=Y,
+      the corresponding Ceilometer resource has a metadata item of the
+      form user_metadata.X=Y and samples about resources so tagged can
+      be queried with a Ceilometer query term of the form
+      metadata.user_metadata.X=Y. In this case the nested stacks give
+      their VMs metadata that is passed as a nested stack parameter,
+      and this stack passes a metadata of the form metering.stack=Y,
+      where Y is this stack's ID.
+
