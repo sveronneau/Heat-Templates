@@ -45,6 +45,7 @@ resources:
       threshold: 50
       alarm_actions:
         - {get_attr: [scaleup_policy, alarm_url]}
+      matching_metadata: {'metadata.user_metadata.stack': {get_param: "OS::stack_id"}}
       comparison_operator: gt
 
   cpu_alarm_low:
@@ -57,26 +58,6 @@ resources:
       threshold: 10
       alarm_actions:
         - {get_attr: [scaledown_policy, alarm_url]}
+      matching_metadata: {'metadata.user_metadata.stack': {get_param: "OS::stack_id"}}
       comparison_operator: lt
-
-  ceilometer_query:
-    value:
-      str_replace:
-        template:
-          ceilometer statistics -m cpu_util
-          -q metadata.user_metadata.stack=stackval -p 600 -a avg
-        params:
-          stackval: { get_param: "OS::stack_id" }
-    description:
-      This is a Ceilometer query for statistics on the cpu_util meter
-      Samples about OS::Nova::Server instances in this stack. The -q
-      parameter selects Samples according to the subject's metadata.
-      When a VM's metadata includes an item of the form metering.X=Y,
-      the corresponding Ceilometer resource has a metadata item of the
-      form user_metadata.X=Y and samples about resources so tagged can
-      be queried with a Ceilometer query term of the form
-      metadata.user_metadata.X=Y. In this case the nested stacks give
-      their VMs metadata that is passed as a nested stack parameter,
-      and this stack passes a metadata of the form metering.stack=Y,
-      where Y is this stack's ID.
 
