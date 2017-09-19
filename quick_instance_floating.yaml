@@ -28,7 +28,7 @@ parameters:
       - custom_constraint: nova.keypair
 
   public_network_id:
-    label: bd2c7df1-8e9c-4fec-9cd0-0fcb73ab9d05
+    label: Public Network
     type: string
     constraints:
       - custom_constraint: neutron.network
