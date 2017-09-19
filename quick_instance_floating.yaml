@@ -76,7 +76,7 @@ resources:
   instance:
     type: OS::Nova::Server
     properties:
-      name: jumphost
+      name: my_heat_instance_1
       image: { get_param: image }
       flavor: { get_param: flavor }
       key_name: { get_param: ssh_key }
