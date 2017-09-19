@@ -23,12 +23,12 @@ parameters:
     label: SSH Key to be injected into instance
     description: Parameter that defines which keypair should be injected into the instance
     type: string
-    default: test-aio
+    default: MyKeyPair
     constraints:
       - custom_constraint: nova.keypair
 
   public_network_id:
-    label: ef0757d9-85d6-417d-a084-868c71e1b0b6
+    label: bd2c7df1-8e9c-4fec-9cd0-0fcb73ab9d05
     type: string
     constraints:
       - custom_constraint: neutron.network
