@@ -1,12 +1,9 @@
 heat_template_version: 2016-04-08
 
 description:
-  Deploys an APACHE 2 instance attached to private network
+  Deploys 3 APACHE 2 instance attached to private network
 
 parameters:
-  name:
-    type: string
-    default: apache
   image_id:
     type: string
     default: Xenial
@@ -16,17 +13,76 @@ parameters:
   key_name:
     type: string
     default: MyKeyPair
+  network:
+    type: string
+    default: private
 
 resources:
-  instance:
+  instance1:
     type: OS::Nova::Server
     properties:
-      name: { get_param: name }
+      name: Apache-1
       image: { get_param: image_id }
       flavor: { get_param: flavor }
       key_name: { get_param: key_name }
       networks:
-        - network: private    
+        - network: { get_param: network }
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          params:
+            wc_notify: {  }
+          template: |
+            #!/bin/bash            
+            set -e 
+            set -o pipefail
+            sudo apt-get clean
+            sudo apt-get update
+            sudo apt-get -y upgrade
+            sudo apt-get -y install apache2 htop stress
+            sudo ufw allow 'Apache Full'
+            sudo chmod -R 777 /var/www/html
+            sudo cat <<EOF > /var/www/html/index.html
+            <html><body><title>Apache Server - $HOSTNAME</title></body></html>
+            EOF
+  
+  instance2:
+    type: OS::Nova::Server
+    properties:
+      name: Apache-2
+      image: { get_param: image_id }
+      flavor: { get_param: flavor }
+      key_name: { get_param: key_name }
+      networks:
+        - network: { get_param: network }
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          params:
+            wc_notify: {  }
+          template: |
+            #!/bin/bash            
+            set -e 
+            set -o pipefail
+            sudo apt-get clean
+            sudo apt-get update
+            sudo apt-get -y upgrade
+            sudo apt-get -y install apache2 htop stress
+            sudo ufw allow 'Apache Full'
+            sudo chmod -R 777 /var/www/html
+            sudo cat <<EOF > /var/www/html/index.html
+            <html><body><title>Apache Server - $HOSTNAME</title></body></html>
+            EOF
+
+  instance3:
+    type: OS::Nova::Server
+    properties:
+      name: Apache-3
+      image: { get_param: image_id }
+      flavor: { get_param: flavor }
+      key_name: { get_param: key_name }
+      networks:
+        - network: { get_param: network }
       user_data_format: RAW
       user_data:
         str_replace:
