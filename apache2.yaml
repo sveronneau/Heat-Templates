@@ -41,6 +41,7 @@ resources:
             sudo apt-get -y upgrade
             sudo apt-get -y install apache2 htop stress
             sudo ufw allow 'Apache Full'
+            sudo chmod -R 777 /var/www/html
             sudo cat <<EOF > /var/www/html/index.html
             <html><body><title>Apache Server - $(hostname)</title></body></html>
             EOF
