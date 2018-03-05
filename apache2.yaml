@@ -43,5 +43,5 @@ resources:
             sudo ufw allow 'Apache Full'
             sudo chmod -R 777 /var/www/html
             sudo cat <<EOF > /var/www/html/index.html
-            <html><body><title>Apache Server - $(hostname)</title></body></html>
+            <html><body><title>Apache Server - $HOSTNAME</title></body></html>
             EOF
