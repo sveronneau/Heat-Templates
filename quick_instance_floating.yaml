@@ -23,7 +23,7 @@ parameters:
     label: SSH Key to be injected into instance
     description: Parameter that defines which keypair should be injected into the instance
     type: string
-    default: MyKeyPair
+    default: MyLittleKeyPair
     constraints:
       - custom_constraint: nova.keypair
 
